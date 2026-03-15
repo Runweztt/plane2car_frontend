@@ -17,8 +17,18 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(formData);
-      navigate('/login');
+      const userData = await register(formData);
+      if (userData) {
+        // Auto-logged in — redirect to appropriate dashboard
+        if (userData.role === 'concierge') {
+          navigate('/concierge');
+        } else {
+          navigate('/dashboard');
+        }
+      } else {
+        // Email confirmation required — send to login
+        navigate('/login');
+      }
     } catch (err) {
       setError('Registration failed. Please try again.');
     }
