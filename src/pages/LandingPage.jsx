@@ -421,7 +421,7 @@ export default function LandingPage() {
 
           <div className="border-t border-slate-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-slate-700 text-xs font-bold uppercase tracking-widest">
-              © 2026 Priority Passenger Concierge Ltd.
+              © 2026 P2C Ltd.
             </p>
             <p className="text-slate-700 text-xs">Built for excellence in Nigerian travel.</p>
           </div>
