@@ -11,26 +11,32 @@ const SignUpPage = () => {
     role: 'passenger'
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError('');
     try {
       const userData = await register(formData);
-      if (userData) {
-        // Auto-logged in — redirect to appropriate dashboard
+      // Only redirect to dashboard if auto-login succeeded (token was stored)
+      if (userData && localStorage.getItem('token')) {
         if (userData.role === 'concierge') {
           navigate('/concierge');
         } else {
           navigate('/dashboard');
         }
       } else {
-        // Email confirmation required — send to login
+        // No token = email confirmation required — send to login
         navigate('/login');
       }
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      setError(err.response?.data?.error || 'Registration failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -118,10 +124,11 @@ const SignUpPage = () => {
 
             <button
               type="submit"
-              className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-600/20 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all active:scale-[0.98]"
+              disabled={isSubmitting}
+              className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-600/20 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Get Started
-              <ArrowRight className="h-4 w-4" />
+              {isSubmitting ? 'Creating account...' : 'Get Started'}
+              {!isSubmitting && <ArrowRight className="h-4 w-4" />}
             </button>
           </form>
 

@@ -7,18 +7,24 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError('');
     try {
       const user = await login(email, password);
       if (user.role === 'passenger') navigate('/dashboard');
       else if (user.role === 'concierge') navigate('/concierge');
       else if (user.role === 'admin') navigate('/admin');
     } catch (err) {
-      setError('Invalid email or password');
+      setError(err.response?.data?.error || 'Invalid email or password');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -78,10 +84,11 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-600/20 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all active:scale-[0.98]"
+              disabled={isSubmitting}
+              className="flex w-full justify-center items-center gap-2 rounded-xl bg-primary-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary-600/20 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Sign In
-              <ArrowRight className="h-4 w-4" />
+              {isSubmitting ? 'Signing in...' : 'Sign In'}
+              {!isSubmitting && <ArrowRight className="h-4 w-4" />}
             </button>
           </form>
 
