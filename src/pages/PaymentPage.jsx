@@ -106,7 +106,7 @@ export default function PaymentPage() {
                 <div className="mt-5 pt-5 border-t border-slate-700 flex items-center justify-between">
                   <span className="text-slate-400 font-semibold">Amount Due</span>
                   <span className="text-3xl font-extrabold text-white">
-                    ₦{Number(booking.service_tiers?.price ?? 0).toLocaleString()}
+                    ${Number(booking.service_tiers?.price ?? 0).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -125,7 +125,7 @@ export default function PaymentPage() {
               className="w-full flex items-center justify-center gap-3 rounded-xl bg-primary-600 hover:bg-primary-500 disabled:opacity-60 disabled:cursor-not-allowed px-6 py-4 text-sm font-bold text-white transition-all shadow-lg shadow-primary-600/20 active:scale-[0.98]"
             >
               {!paying && <CreditCard className="h-5 w-5" />}
-              {paying ? 'Redirecting to payment…' : `Pay ₦${Number(booking.service_tiers?.price ?? 0).toLocaleString()}`}
+              {paying ? 'Redirecting to payment…' : `Pay $${Number(booking.service_tiers?.price ?? 0).toLocaleString()}`}
             </button>
 
             <div className="mt-5 flex items-center justify-center gap-2 text-slate-600 text-xs">
