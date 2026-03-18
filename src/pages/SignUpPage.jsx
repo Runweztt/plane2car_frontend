@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Plane, ArrowRight, Mail, Lock, User } from 'lucide-react';
+import { Plane, ArrowRight, Mail, Lock, User, CheckCircle } from 'lucide-react';
 
 export default function SignUpPage() {
   // Role is always 'passenger' — concierges are added by admin only
   const [formData, setFormData] = useState({ full_name: '', email: '', password: '', role: 'passenger' });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export default function SignUpPage() {
       if (userData && localStorage.getItem('token')) {
         navigate('/dashboard');
       } else {
-        navigate('/login');
+        setRegistered(true);
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Please try again.');
@@ -33,6 +34,40 @@ export default function SignUpPage() {
   };
 
   const FIELD_CLASS = 'block w-full rounded-xl border border-slate-800 bg-slate-900/50 pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/50 transition-all';
+
+  if (registered) {
+    return (
+      <div className="min-h-screen bg-[#020817] bg-grid flex items-center justify-center px-4 py-16 relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-primary-600/8 rounded-full blur-[100px]" />
+          <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] bg-blue-600/6 rounded-full blur-[100px]" />
+        </div>
+        <div className="relative w-full max-w-md text-center">
+          <div className="rounded-2xl bg-slate-900/80 border border-slate-800 shadow-2xl p-10 backdrop-blur-sm">
+            <div className="flex justify-center mb-5">
+              <div className="h-16 w-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-green-400" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-extrabold text-white mb-3">Check your email</h2>
+            <p className="text-slate-400 text-sm leading-relaxed mb-2">
+              We sent a confirmation link to
+            </p>
+            <p className="text-primary-400 font-semibold text-sm mb-5">{formData.email}</p>
+            <p className="text-slate-500 text-xs leading-relaxed mb-8">
+              Click the link in the email to confirm your account, then come back to sign in. Check your spam folder if you don't see it.
+            </p>
+            <Link
+              to="/login"
+              className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary-600 hover:bg-primary-500 px-4 py-3.5 text-sm font-bold text-white transition-all shadow-lg shadow-primary-600/20"
+            >
+              Go to Sign In <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#020817] bg-grid flex items-center justify-center px-4 py-16 relative overflow-hidden">
