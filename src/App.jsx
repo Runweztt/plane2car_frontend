@@ -11,6 +11,8 @@ import BookingForm from './pages/BookingForm';
 import ConciergeDashboard from './pages/ConciergeDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLoginPage from './pages/AdminLoginPage';
+import PaymentPage from './pages/PaymentPage';
+import PaymentCallbackPage from './pages/PaymentCallbackPage';
 
 function App() {
   return (
@@ -33,6 +35,18 @@ function App() {
               <Route path="/book" element={
                 <ProtectedRoute allowedRoles={['passenger']}>
                   <BookingForm />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/payment/:bookingId" element={
+                <ProtectedRoute allowedRoles={['passenger']}>
+                  <PaymentPage />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/payment/callback" element={
+                <ProtectedRoute allowedRoles={['passenger']}>
+                  <PaymentCallbackPage />
                 </ProtectedRoute>
               } />
 

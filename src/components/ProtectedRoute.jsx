@@ -1,12 +1,16 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const ProtectedRoute = ({ children, allowedRoles }) => {
+export default function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
-    return <div className="flex h-screen items-center justify-center bg-slate-900 text-white">Loading...</div>;
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#020817]">
+        <div className="h-8 w-8 rounded-full border-2 border-primary-500/30 border-t-primary-500 animate-spin" />
+      </div>
+    );
   }
 
   if (!user) {
@@ -18,6 +22,4 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   return children;
-};
-
-export default ProtectedRoute;
+}

@@ -42,8 +42,15 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Used by AdminLoginPage which manages its own API call (custom admin-login endpoint).
+  const loginWithToken = (token, userData) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loginWithToken, loading }}>
       {children}
     </AuthContext.Provider>
   );
